@@ -1,5 +1,9 @@
 import { sender, mailer } from "./mailtrap.config.js";
-import { VERIFICATION_EMAIL_TEMPLATE } from "./emailTemplates.js";
+import {
+  PASSWORD_RESET_REQUEST_TEMPLATE,
+  PASSWORD_RESET_SUCCESS_TEMPLATE,
+  VERIFICATION_EMAIL_TEMPLATE,
+} from "./emailTemplates.js";
 export async function sendVerificationEmail(email, verificationToken) {
   const recipients = [email];
 
@@ -42,5 +46,45 @@ export async function sendWelcomeEmail(email, name) {
   } catch (error) {
     console.error("Error sending email:", error);
     throw new Error("Failed to send welcome email.");
+  }
+}
+
+export async function sendForgotPasswordEmail(email, resetUrl) {
+  const recipients = [email];
+
+  try {
+    const response = await mailer.sendMail({
+      from: sender,
+      to: recipients,
+      subject: "Password Reset | Easy Auth",
+      html: PASSWORD_RESET_REQUEST_TEMPLATE.replace("{resetURL}", resetUrl),
+      category: "Password Reset",
+    });
+
+    console.log("Succesfully sent forgot password email.", response);
+  } catch (error) {
+    console.log("Error in sending forgot password email.", error);
+
+    throw new Error("Error in sending forgot password email.", error);
+  }
+}
+
+export async function sendPasswordResetSuccessEmail(email) {
+  const recipients = [email];
+
+  try {
+    const response = await mailer.sendMail({
+      from: sender,
+      to: recipients,
+      subject: "Password Successfully Reset | Easy Auth",
+      html: PASSWORD_RESET_SUCCESS_TEMPLATE,
+      category: "Password Reset Success",
+    });
+
+    console.log("Successfully sent password reset success email", response);
+  } catch (error) {
+    console.log("Error in sending password reset success email.", error);
+
+    throw new Error("Error in sending password reset success email.", error);
   }
 }
