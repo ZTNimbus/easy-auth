@@ -3,6 +3,7 @@ import { FormEvent, useState } from "react";
 import Input from "../components/Input";
 import { User, Mail, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
+import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
 
 function SignupPage() {
   const [name, setName] = useState("");
@@ -50,11 +51,11 @@ function SignupPage() {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          {/* TODO: PASSWORD STRENGTH METER */}
+          <PasswordStrengthMeter password={password} />
 
           <motion.button
             type="submit"
-            className="mt-5 w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-cyan-600 text-white font-bold rounded-lg shadow-lg hover:from-blue-600 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200"
+            className="mt-5 w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-cyan-600 text-white font-bold rounded-lg shadow-lg hover:from-blue-600 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200 hover:cursor-pointer"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.9 }}
           >
