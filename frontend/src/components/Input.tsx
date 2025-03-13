@@ -2,6 +2,7 @@ import { LucideIcon } from "lucide-react";
 
 interface InputProps {
   icon: LucideIcon;
+  name: string;
   placeholder: string;
   type: string;
   value: string;

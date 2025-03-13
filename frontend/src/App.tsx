@@ -1,9 +1,23 @@
+import { Toaster } from "react-hot-toast";
 import { Route, Routes } from "react-router-dom";
 import FloatingShape from "./components/FloatingShape";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
+import EmailVerificationPage from "./pages/EmailVerificationPage";
+import { useAuthStore } from "./store/useAuthStore";
+import { useEffect } from "react";
+import RedirectAuthenticatedUser from "./components/RedirectAuthenticatedUser";
+import ProtectedRoute from "./components/ProtectedRoute";
+import HomePage from "./pages/HomePage";
+import { Loader } from "lucide-react";
 
 function App() {
+  const { isCheckingAuth, checkAuth } = useAuthStore();
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
   return (
     <div className="min-h-screen bg-gradient-to-r from-gray-900 via-cyan-900 to-blue-900 flex items-center justify-center relative overflow-hidden">
       <FloatingShape
@@ -30,11 +44,39 @@ function App() {
         delay={2}
       />
 
+      {isCheckingAuth && (
+        <Loader className="animate-spin text-blue-950" size={100} />
+      )}
+
       <Routes>
-        <Route path="/" element={"Home"} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <RedirectAuthenticatedUser>
+              <SignupPage />
+            </RedirectAuthenticatedUser>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <RedirectAuthenticatedUser>
+              <LoginPage />
+            </RedirectAuthenticatedUser>
+          }
+        />
+        <Route path="/verify-email" element={<EmailVerificationPage />} />
       </Routes>
+
+      <Toaster />
     </div>
   );
 }

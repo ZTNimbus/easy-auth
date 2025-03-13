@@ -2,15 +2,24 @@ import { motion } from "framer-motion";
 import { Loader, Lock, Mail } from "lucide-react";
 import { FormEvent, useState } from "react";
 import Input from "../components/Input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/useAuthStore";
+import toast from "react-hot-toast";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const { login, isLoading, error } = useAuthStore();
+  const navigate = useNavigate();
 
-  function handleLogin(e: FormEvent) {
+  async function handleLogin(e: FormEvent) {
     e.preventDefault();
+
+    if (!email || !password) return toast.error("Both fields are required");
+
+    await login(email, password);
+
+    navigate("/");
   }
 
   return (
@@ -27,6 +36,7 @@ function LoginPage() {
 
         <form onSubmit={handleLogin}>
           <Input
+            name="email"
             icon={Mail}
             type="email"
             placeholder="Your Email"
@@ -34,8 +44,9 @@ function LoginPage() {
             onChange={(e) => setEmail(e.target.value)}
           />
           <Input
+            name="password"
             icon={Lock}
-            type="email"
+            type="password"
             placeholder="Your Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -49,6 +60,8 @@ function LoginPage() {
               Forgot Password?
             </Link>
           </div>
+
+          {error && <p className="text-red-500 font-semibold mb-5">{error}</p>}
 
           <motion.button
             type="submit"
