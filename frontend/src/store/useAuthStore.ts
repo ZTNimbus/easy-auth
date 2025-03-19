@@ -7,6 +7,9 @@ interface User {
   password: string | null;
   name: string;
   isVerified: boolean;
+  createdAt: Date;
+  lastLogin: Date;
+  updatedAt: Date;
 }
 
 interface useAuthStoreProps {
@@ -17,6 +20,7 @@ interface useAuthStoreProps {
   isCheckingAuth: boolean;
   signup: (email: string, password: string, name: string) => void;
   login: (email: string, password: string) => void;
+  logout: VoidFunction;
   verifyEmail: (verificationCode: string) => void;
   checkAuth: VoidFunction;
 }
@@ -81,6 +85,27 @@ export const useAuthStore = create<useAuthStoreProps>((set) => {
         const user = response.data.data as User;
 
         set({ user, isAuthenticated: true, isLoading: false, error: null });
+      } catch (error) {
+        const errorMessage = handleError(error, "Error login");
+
+        set({ isLoading: false, error: errorMessage });
+
+        throw error;
+      }
+    },
+
+    logout: async () => {
+      set({ isLoading: true, error: null });
+
+      try {
+        await axios.post(`${API_URL}/logout`);
+
+        set({
+          user: null,
+          isAuthenticated: false,
+          error: null,
+          isLoading: false,
+        });
       } catch (error) {
         const errorMessage = handleError(error, "Error login");
 
