@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
 import { useAuthStore } from "../store/useAuthStore";
 import { formatDate } from "../utils/date";
+import Button from "../components/Button";
 
 function HomePage() {
-  const { user, logout } = useAuthStore();
+  const { user, logout, isLoading } = useAuthStore();
 
   function handleLogout() {
     logout();
@@ -66,14 +67,9 @@ function HomePage() {
         animate={{ opacity: 1, y: 0 }}
         className="mt-4"
       >
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleLogout}
-          className="w-full py-3 bg-gradient-to-r from-blue-500 to-cyan-600 text-white font-bold rounded-lg shadow-lg hover:from-blue-600 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
-        >
+        <Button onClick={handleLogout} disabled={isLoading}>
           Logout
-        </motion.button>
+        </Button>
       </motion.div>
     </motion.div>
   );

@@ -5,6 +5,7 @@ import Input from "../components/Input";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import toast from "react-hot-toast";
+import Button from "../components/Button";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -63,19 +64,18 @@ function LoginPage() {
 
           {error && <p className="text-red-500 font-semibold mb-5">{error}</p>}
 
-          <motion.button
+          <Button
             type="submit"
             disabled={isLoading}
-            className="mt-5 w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-cyan-600 text-white font-bold rounded-lg shadow-lg hover:from-blue-600 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200 hover:cursor-pointer"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.9 }}
+            hoverScale={1.02}
+            tapScale={0.9}
           >
             {isLoading ? (
               <Loader className="size-6 animate-spin mx-auto" />
             ) : (
               "Log In"
             )}
-          </motion.button>
+          </Button>
         </form>
       </div>
 

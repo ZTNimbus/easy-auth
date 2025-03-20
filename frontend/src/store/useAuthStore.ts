@@ -16,6 +16,7 @@ interface useAuthStoreProps {
   user: User | null;
   isAuthenticated: boolean;
   error: string | null;
+  message: string | null;
   isLoading: boolean;
   isCheckingAuth: boolean;
   signup: (email: string, password: string, name: string) => void;
@@ -23,9 +24,14 @@ interface useAuthStoreProps {
   logout: VoidFunction;
   verifyEmail: (verificationCode: string) => void;
   checkAuth: VoidFunction;
+  forgotPassword: (email: string) => void;
+  resetPassword: (token: string, password: string) => void;
 }
 
-const API_URL = "http://localhost:3000/api/auth";
+const API_URL =
+  import.meta.env.NODE === "development"
+    ? "http://localhost:3000/api/auth"
+    : "/api/auth";
 
 axios.defaults.withCredentials = true;
 
@@ -43,6 +49,7 @@ export const useAuthStore = create<useAuthStoreProps>((set) => {
   return {
     user: null,
     isAuthenticated: false,
+    message: null,
     error: null,
     isLoading: false,
     isCheckingAuth: false,
@@ -152,6 +159,49 @@ export const useAuthStore = create<useAuthStoreProps>((set) => {
       } catch (error) {
         //
         set({ error: null, isCheckingAuth: false, isAuthenticated: false });
+      }
+    },
+
+    forgotPassword: async (email) => {
+      set({ isLoading: true, error: null });
+
+      try {
+        const response = await axios.post(`${API_URL}/forgot-password`, {
+          email,
+        });
+
+        set({ isLoading: false, message: response.data.message });
+      } catch (error) {
+        const errorMessage = handleError(
+          error,
+          "Error sending password reset email"
+        );
+
+        set({ isLoading: false, error: errorMessage });
+
+        throw error;
+      }
+    },
+
+    resetPassword: async (token, password) => {
+      set({ isLoading: true, error: null });
+
+      try {
+        const response = await axios.post(
+          `${API_URL}/reset-password/${token}`,
+          { password }
+        );
+
+        set({ isLoading: false, message: response.data.message });
+      } catch (error) {
+        const errorMessage = handleError(
+          error,
+          "Error sending password reset email"
+        );
+
+        set({ isLoading: false, error: errorMessage });
+
+        throw error;
       }
     },
   };

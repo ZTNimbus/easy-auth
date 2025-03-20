@@ -5,6 +5,7 @@ import { User, Mail, Lock, Loader } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
 import { useAuthStore } from "../store/useAuthStore";
+import Button from "../components/Button";
 
 function SignupPage() {
   const [name, setName] = useState("");
@@ -68,19 +69,18 @@ function SignupPage() {
           {error && <p className="text-red-500 font-semibold mt-2">{error}</p>}
           <PasswordStrengthMeter password={password} />
 
-          <motion.button
+          <Button
             type="submit"
             disabled={isLoading}
-            className="mt-5 w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-cyan-600 text-white font-bold rounded-lg shadow-lg hover:from-blue-600 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200 hover:cursor-pointer"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.9 }}
+            hoverScale={1.02}
+            tapScale={0.9}
           >
             {!isLoading ? (
               "Create Account"
             ) : (
               <Loader className="animate-spin mx-auto" size={24} />
             )}
-          </motion.button>
+          </Button>
         </form>
       </div>
 

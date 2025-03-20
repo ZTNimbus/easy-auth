@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import FloatingShape from "./components/FloatingShape";
 import LoadingSpinner from "./components/LoadingSpinner";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -10,6 +10,8 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import { useAuthStore } from "./store/useAuthStore";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import PasswordResetPage from "./pages/PasswordResetPage";
 
 function App() {
   const { isCheckingAuth, checkAuth } = useAuthStore();
@@ -72,6 +74,26 @@ function App() {
           }
         />
         <Route path="/verify-email" element={<EmailVerificationPage />} />
+
+        <Route
+          path="/forgot-password"
+          element={
+            <RedirectAuthenticatedUser>
+              <ForgotPasswordPage />
+            </RedirectAuthenticatedUser>
+          }
+        />
+
+        <Route
+          path="/reset-password/:resetToken"
+          element={
+            <RedirectAuthenticatedUser>
+              <PasswordResetPage />
+            </RedirectAuthenticatedUser>
+          }
+        />
+
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
       <Toaster />
