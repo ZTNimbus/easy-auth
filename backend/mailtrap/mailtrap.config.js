@@ -8,6 +8,6 @@ export const mailer = Nodemailer.createTransport(
 );
 
 export const sender = {
-  address: "hello@demomailtrap.co",
-  name: "Mailtrap Test",
+  address: "kaya@kaya-atasoy.site",
+  name: "Easy Auth",
 };
