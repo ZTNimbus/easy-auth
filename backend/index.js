@@ -14,10 +14,8 @@ const _dirname = path.resolve();
 
 app.use(
   cors({
-    origin:
-      process.env.NODE_ENV === "production"
-        ? "http://localhost:5173"
-        : "https://easy-auth-tau.vercel.app/",
+    origin: "http://localhost:5173",
+
     credentials: true,
   })
 );
